@@ -10,8 +10,8 @@ namespace compito_18_02.Models
     {
         public string Azienda { get; set; }
         public string JobTitle { get; set; }
-        public DateTime Dal {  get; set; }
-        public DateTime Al { get; set; }
+        public DateOnly Dal {  get; set; }
+        public DateOnly Al { get; set; }
         public string Compiti { get; set; }
     }
 }

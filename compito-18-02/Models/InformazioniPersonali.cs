@@ -10,7 +10,7 @@ namespace compito_18_02.Models
     {
         public string Nome {  get; set; }
         public string Cognome { get; set; }
-        public string Telefono { get; set; }
+        public double Telefono { get; set; }
         public string Mail { get; set; }
     }
 }

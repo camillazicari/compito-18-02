@@ -1,25 +1,67 @@
 ﻿
+using System.ComponentModel;
+using System.Text.RegularExpressions;
 using compito_18_02.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 var cv = new CV();
 
 Console.WriteLine("Curriculum Vitae di:");
+nome:
 Console.WriteLine("Inserisci il tuo nome: ");
 string nome = Console.ReadLine().ToUpper();
-cv.InformazioniPersonali.Nome = nome;
+if (!string.IsNullOrWhiteSpace(nome))
+{
+    cv.InformazioniPersonali.Nome = nome;
+
+} else
+{
+    Console.WriteLine("Inserisci un nome valido.");
+    goto nome;
+}
+cognome:
 Console.WriteLine("Inserisci il tuo cognome:");
 string cognome = Console.ReadLine().ToUpper();
-cv.InformazioniPersonali.Cognome = cognome;
+if (!string.IsNullOrWhiteSpace(cognome))
+{
+    cv.InformazioniPersonali.Cognome = cognome;
+
+}
+else
+{
+    Console.WriteLine("Inserisci un cognome valido.");
+    goto cognome;
+}
 Console.Clear();
 Console.WriteLine("------Curriculum Vitae di: " + nome+ " " + cognome + "------");
 
 Console.WriteLine("*INFORMAZIONI PERSONALI*");
+email:
 Console.WriteLine("Inserisci la tua email:");
+
 string email = Console.ReadLine();
-cv.InformazioniPersonali.Mail = email;
+if (!string.IsNullOrWhiteSpace(email) && email.Contains("@") && email.Contains("."))
+{
+    cv.InformazioniPersonali.Mail = email;
+
+}
+else
+{
+    Console.WriteLine("Inserisci una email valido.");
+    goto email;
+}
+telefono:
 Console.WriteLine("Inserisci il tuo numero di telefono:");
-string telefono = Console.ReadLine();
-cv.InformazioniPersonali.Telefono = telefono;
+double.TryParse(Console.ReadLine(), out double telefono);
+if (telefono > 3000000000)
+{
+    cv.InformazioniPersonali.Telefono = telefono;
+}
+else
+{
+    Console.WriteLine("Inserisci un numero di telefono valido.");
+    goto telefono;
+}
 Console.Clear();
 
 
@@ -28,14 +70,64 @@ Console.WriteLine("*STUDI E FORMAZIONE*");
 back:
 Console.WriteLine("Inserisci il nome dell'istituto di formazione che hai frequentato:");
 string istituto = Console.ReadLine().ToUpper();
+if (string.IsNullOrWhiteSpace(istituto))
+{
+    Console.WriteLine("Inserisci un istituto di formazione valido.");
+    goto back;
+}
+studi:
 Console.WriteLine("Inserisci la tipologia di studi:");
 string tipo = Console.ReadLine();
+if (string.IsNullOrWhiteSpace(tipo))
+{
+    Console.WriteLine("Inserisci una tipologia di studi valida.");
+    goto studi;
+}
+qualifica:
 Console.WriteLine("Inserisci la qualifica raggiunta:");
 string qualifica = Console.ReadLine();
-Console.WriteLine("Inserisci la data di inizio studi:");
-DateTime.TryParse(Console.ReadLine(), out DateTime inizio);
-Console.WriteLine("Inserisci la data di fine studi:");
-DateTime.TryParse(Console.ReadLine(), out DateTime fine);
+if (string.IsNullOrWhiteSpace(qualifica))
+{
+    Console.WriteLine("Inserisci un qualifica valida.");
+    goto qualifica;
+}
+inizio:
+Console.WriteLine("Inserisci la data di inizio studi nel formato aaaa-mm-gg (es. 2020-10-19):");
+string dataInizio = Console.ReadLine();
+Regex regex = new Regex(@"^\d{4}-\d{2}-\d{2}$");
+DateOnly inizio;
+if (regex.IsMatch(dataInizio) && !string.IsNullOrWhiteSpace(dataInizio))
+{
+    if (!DateOnly.TryParse(dataInizio, out inizio))
+    {
+        Console.WriteLine("Data non valida. Verifica che il mese e il giorno siano corretti.");
+        goto inizio;
+    }
+}
+else
+{
+    Console.WriteLine("Inserire la data di inizio studi nel formato corretto. Attenzione ad inserire anche - tra l'anno, il giorno ed il mese");
+    goto inizio;
+}
+
+fine:
+Console.WriteLine("Inserisci la data di fine studi nel formato aaaa-mm-gg (es. 2020-10-19):");
+string dataFine = Console.ReadLine();
+DateOnly fine;
+if (regex.IsMatch(dataFine) && !string.IsNullOrWhiteSpace(dataFine))
+{
+    if (!DateOnly.TryParse(dataFine, out fine))
+    {
+        Console.WriteLine("Data non valida. Verifica che il mese e il giorno siano corretti.");
+        goto fine;
+    }
+}
+else
+{
+    Console.WriteLine("Inserire la data di fine studi nel formato corretto. Attenzione ad inserire anche - tra l'anno, il giorno ed il mese");
+    goto fine;
+}
+
 var studi = new Studi()
 {
     Istituto = istituto,
@@ -62,14 +154,81 @@ Console.WriteLine("*ESPERIENZE PROFESSIONALI*");
 back2:
 Console.WriteLine("Inserisci il nome dell'azienda per la quale hai lavorato:");
 string presso = Console.ReadLine().ToUpper();
+if (string.IsNullOrWhiteSpace(presso))
+{
+    Console.WriteLine("Inserisci un'azienda valida.");
+    goto back2;
+}
+impiego:
 Console.WriteLine("Inserisci il tipo di impiego:");
 string impiego = Console.ReadLine();
+if (string.IsNullOrWhiteSpace(impiego))
+{
+    Console.WriteLine("Inserisci un impiego valido.");
+    goto impiego;
+}
+compito:
 Console.WriteLine("Inserisci il compito che hai dovuto svolgere come " + impiego);
 string compito = Console.ReadLine();
-Console.WriteLine("Inserisci la data di inizio impiego:");
-DateTime.TryParse(Console.ReadLine(), out DateTime inizioImpiego);
-Console.WriteLine("Inserisci la data di fine impiego:");
-DateTime.TryParse(Console.ReadLine(), out DateTime fineImpiego);
+if (string.IsNullOrWhiteSpace(compito))
+{
+    Console.WriteLine("Inserisci un compito valido.");
+    goto compito;
+}
+inizioImp:
+Console.WriteLine("Inserisci la data di inizio impiego nel formato aaaa-mm-gg (es. 2020-10-19):");
+string inizioImp = Console.ReadLine();
+DateOnly inizioImpiego;
+if (regex.IsMatch(inizioImp) && !string.IsNullOrWhiteSpace(inizioImp))
+{
+    if (!DateOnly.TryParse(inizioImp, out inizioImpiego))
+    {
+        Console.WriteLine("Data non valida. Verifica che il mese e il giorno siano corretti.");
+        goto inizioImp;
+    }
+}
+else
+{
+    Console.WriteLine("Inserire la data di inizio impiego nel formato corretto. Attenzione ad inserire anche - tra l'anno, il giorno ed il mese");
+    goto inizioImp;
+}
+
+scelta2:
+Console.WriteLine("Attualmente lavori qui?");
+Console.WriteLine("1. Sì");
+Console.WriteLine("2. No");
+int.TryParse(Console.ReadLine(), out int scelta2);
+DateOnly fineImpiego = DateOnly.FromDateTime(DateTime.Today);
+if (scelta2 > 0 && scelta2 < 3)
+{
+    if(scelta2 == 1)
+    {
+        goto lista;
+    }
+
+} else
+{
+    Console.WriteLine("Effettua una scelta valida.");
+    goto scelta2;
+}
+fineImp:
+Console.WriteLine("Inserisci la data di fine impiego nel formato aaaa-mm-gg (es. 2020-10-19):");
+string fineImp = Console.ReadLine();
+if (regex.IsMatch(fineImp) && !string.IsNullOrWhiteSpace(fineImp))
+{
+    if (!DateOnly.TryParse(fineImp, out fineImpiego))
+    {
+        Console.WriteLine("Data non valida. Verifica che il mese e il giorno siano corretti.");
+        goto fineImp;
+    }
+}
+else
+{
+    Console.WriteLine("Inserire la data di fine impiego nel formato corretto. Attenzione ad inserire anche - tra l'anno, il giorno ed il mese");
+    goto fineImp;
+}
+
+lista:
 var esperienza = new Esperienza()
 {
     Azienda = presso,
@@ -82,14 +241,15 @@ cv.Impieghi.Add(esperienza);
 Console.WriteLine("Hai lavorato per altre aziende?");
 Console.WriteLine("1.Si");
 Console.WriteLine("2.No");
-int.TryParse(Console.ReadLine(), out int scelta2);
-if (scelta2 == 1)
+int.TryParse(Console.ReadLine(), out int scelta3);
+if (scelta3 == 1)
 {
     goto back2;
 }
 else
 {
     Console.WriteLine("Esperienze professionali aggiunte con successo!");
+    Console.Clear();
 }
 
 Console.Clear();
